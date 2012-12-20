@@ -5,11 +5,13 @@
   "keywords": [],
   "author": "matt mueller <mattmuelle@gmail.com>",
   "dependencies": {
-    "monk" : "*"
+    "monk": "*",
+    "batch": "~0.2.1"
   },
   "devDependencies": {
     "mocha": "*",
-    "should": "*"
+    "should": "*",
+    "pwd": "*"
   },
   "main": "index"
 }
