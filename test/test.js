@@ -20,5 +20,5 @@ user.name('matt')
     .password('test');
 
 user.save(function(err) {
-  console.log(user);
+  console.log(user.toJSON());
 });
