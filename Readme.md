@@ -1,7 +1,9 @@
 
 # model-mongo
 
-Mongo plugin for `matthewmueller/model`, based on `component/model`. Uses `learnboost/monk` to for a clean mongo driver.
+Mongo plugin for `matthewmueller/model`, based on `component/model`.
+
+Uses `learnboost/monk` for a clean mongo driver.
 
 ## Example
 
