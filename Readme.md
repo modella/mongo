@@ -1,9 +1,36 @@
 
 # monk-model
 
-simple models for [monk](https://github.com/learnboost/monk) based on [component/model](https://github.com/component/model)
+Mongo plugin for `matthewmueller/model`, based on `component/model`.
 
+## Example
 
+```js
+var model = require('node-model');
+    mongo = require('../')('localhost/monk-model');
+
+var User = model('user')
+  .attr('_id')
+  .attr('name')
+  .attr('email')
+  .attr('password');
+
+User.use(mongo);
+
+/**
+ * Initialize
+ */
+
+var user = new User;
+
+user.name('matt')
+    .email('mattmuelle@gmail.com')
+    .password('test');
+
+user.save(function(err) {
+  console.log(user.toJSON());
+});
+```
 
 ## License
 
