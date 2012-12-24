@@ -9,7 +9,7 @@ Uses `learnboost/monk` for a clean mongo driver.
 
 ```js
 var model = require('node-model');
-    mongo = require('../')('localhost/model-mongo');
+    mongo = require('model-mongo')('localhost/db');
 
 var User = model('user')
   .attr('_id')
