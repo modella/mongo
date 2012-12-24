@@ -1,13 +1,13 @@
 
-# monk-model
+# model-mongo
 
-Mongo plugin for `matthewmueller/model`, based on `component/model`.
+Mongo plugin for `matthewmueller/model`, based on `component/model`. Uses `learnboost/monk` to for a clean mongo driver.
 
 ## Example
 
 ```js
 var model = require('node-model');
-    mongo = require('../')('localhost/monk-model');
+    mongo = require('../')('localhost/model-mongo');
 
 var User = model('user')
   .attr('_id')

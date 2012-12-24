@@ -1,5 +1,5 @@
 var model = require('node-model');
-    mongo = require('../')('localhost/monk-model');
+    mongo = require('../')('localhost/model-mongo');
 
 var User = model('user')
   .attr('_id')

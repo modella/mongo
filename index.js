@@ -5,7 +5,7 @@
 var sync = {};
 
 /**
- * Export `Monk`
+ * Export `Mongo`
  */
 
 module.exports = function(url) {
