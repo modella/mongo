@@ -69,7 +69,7 @@ sync.removeAll = function(query, fn) {
 sync.save = function(fn) {
   this.model.db.insert(this.attrs, function(err, doc) {
     if(err) return fn(err);
-    return fn(err, doc);
+    return fn(null, doc);
   });
 };
 
@@ -82,8 +82,12 @@ sync.update = function(fn) {
       id = this.primary(),
       changed = this.changed();
 
+  // Mongo won't let you modify _id, even if it's the same
+  if(changed._id) delete changed._id;
+
   db.findAndModify({ _id : id }, { $set : changed }, function(err) {
-    return fn(err);
+    if(err) return fn(err);
+    fn();
   });
 };
 
