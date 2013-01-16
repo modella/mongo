@@ -25,13 +25,17 @@ module.exports = function(url) {
  * All
  */
 
-sync.all = function(query, fn) {
+sync.all = function(query, options, fn) {
   if (arguments.length == 1) {
     fn = query;
+    options = {};
     query = {};
+  } else if (arguments.length == 2) {
+    fn = options;
+    options = {};
   }
 
-  this.db.find(query, function(err, models) {
+  this.db.find(query, options, function(err, models) {
     if (err) return fn(err);
     else if (!models) return fn(null, false);
     return fn(null, models);
@@ -42,12 +46,16 @@ sync.all = function(query, fn) {
  * Get
  */
 
-sync.get = function(query, fn) {
-  var action = 'findOne';
+sync.get = function(query, options, fn) {
+  if(arguments.length == 2) {
+    fn = options;
+    options = {};
+  }
 
+  var action = 'findOne';
   if ('string' == typeof query) action = 'findById';
 
-  this.db[action](query, function(err, model) {
+  this.db[action](query, options, function(err, model) {
     if(err) return fn(err);
     else if(!model) return fn(null, false);
     return fn(null, model);
