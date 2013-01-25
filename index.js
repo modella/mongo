@@ -75,7 +75,7 @@ sync.removeAll = function(query, fn) {
  */
 
 sync.save = function(fn) {
-  this.model.db.insert(this.attrs, function(err, doc) {
+  this.model.db.insert(this.toJSON(), function(err, doc) {
     if(err) return fn(err);
     return fn(null, doc);
   });
