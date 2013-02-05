@@ -6,7 +6,8 @@
   "author": "matt mueller <mattmuelle@gmail.com>",
   "dependencies": {
     "batch": "~0.2.1",
-    "monk": "~0.7.0"
+    "monk": "~0.7.0",
+    "debug": "~0.7.0"
   },
   "devDependencies": {
     "node-model": "*",

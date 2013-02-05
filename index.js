@@ -2,7 +2,8 @@
  * Module dependencies
  */
 
-var sync = {};
+var debug = require('debug')('modella:mongo'),
+    sync = {};
 
 /**
  * Export `Mongo`
@@ -35,9 +36,11 @@ sync.all = function(query, options, fn) {
     options = {};
   }
 
+  debug('getting all %j with options %j', query, options);
   this.db.find(query, options, function(err, models) {
     if (err) return fn(err);
     else if (!models) return fn(null, false);
+    debug('got all models %j', models);
     return fn(null, models);
   });
 };
@@ -55,9 +58,11 @@ sync.get = function(query, options, fn) {
   var action = 'findOne';
   if ('string' == typeof query) action = 'findById';
 
+  debug('getting %j using %s with %j options...', query, action, options);
   this.db[action](query, options, function(err, model) {
     if(err) return fn(err);
     else if(!model) return fn(null, false);
+    debug('got %j', model);
     return fn(null, model);
   });
 };
@@ -75,8 +80,11 @@ sync.removeAll = function(query, fn) {
  */
 
 sync.save = function(fn) {
-  this.model.db.insert(this.toJSON(), function(err, doc) {
+  var json = this.toJSON();
+  debug('saving... %j', json);
+  this.model.db.insert(json, function(err, doc) {
     if(err) return fn(err);
+    debug('saved %j', 'doc');
     return fn(null, doc);
   });
 };
@@ -93,8 +101,10 @@ sync.update = function(fn) {
   // Mongo won't let you modify _id, even if it's the same
   if(changed._id) delete changed._id;
 
-  db.findAndModify({ _id : id }, { $set : changed }, function(err) {
+  debug('updating %s and settings %j', id, changed);
+  db.findAndModify({ _id : id }, { $set : changed }, function(err, doc) {
     if(err) return fn(err);
+    debug('updated %j', doc);
     fn();
   });
 };
@@ -112,7 +122,10 @@ sync.remove = function(query, fn) {
     query = { _id : id };
   }
 
+  debug('removing %j', query);
   db.remove(query, function(err) {
-    return fn(err);
+    if(err) return fn(err);
+    debug('removed');
+    return fn();
   });
 };
