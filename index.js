@@ -40,7 +40,16 @@ sync.all = function(query, options, fn) {
   this.db.find(query, options, function(err, models) {
     if (err) return fn(err);
     else if (!models) return fn(null, false);
+    var model;
+
     debug('got all models %j', models);
+
+    // convert all objectids to strings
+    for (var i = 0, len = models.length; i < len; i++) {
+      model = models[i];
+      if(model._id) model._id = model._id.toString();
+    }
+
     return fn(null, models);
   });
 };
@@ -50,6 +59,8 @@ sync.all = function(query, options, fn) {
  */
 
 sync.get = function(query, options, fn) {
+  var db = this.db;
+
   if(arguments.length == 2) {
     fn = options;
     options = {};
@@ -59,10 +70,15 @@ sync.get = function(query, options, fn) {
   if ('string' == typeof query) action = 'findById';
 
   debug('getting %j using %s with %j options...', query, action, options);
-  this.db[action](query, options, function(err, model) {
+  db[action](query, options, function(err, model) {
     if(err) return fn(err);
     else if(!model) return fn(null, false);
+
     debug('got %j', model);
+
+    // convert objectid to string
+    if(model._id) model._id = model._id.toString();
+
     return fn(null, model);
   });
 };
@@ -84,7 +100,9 @@ sync.save = function(fn) {
   debug('saving... %j', json);
   this.model.db.insert(json, function(err, doc) {
     if(err) return fn(err);
-    debug('saved %j', 'doc');
+    // convert object to to string
+    doc._id = doc._id.toString();
+    debug('saved %j', doc);
     return fn(null, doc);
   });
 };
@@ -101,6 +119,9 @@ sync.update = function(fn) {
   // Mongo won't let you modify _id, even if it's the same
   if(changed._id) delete changed._id;
 
+  // convert string id to objectid
+  id = db.id(id);
+
   debug('updating %s and settings %j', id, changed);
   db.findAndModify({ _id : id }, { $set : changed }, function(err, doc) {
     if(err) return fn(err);
@@ -116,6 +137,9 @@ sync.update = function(fn) {
 sync.remove = function(query, fn) {
   var db = this.model.db,
       id = this.primary();
+
+  // convert string id to objectid
+  id = db.id(id);
 
   if (arguments.length == 1) {
     fn = query;
