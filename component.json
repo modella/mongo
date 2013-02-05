@@ -1,8 +1,0 @@
-{
-  "name": "model-mongo",
-  "repo": "matthewmueller/model-mongo",
-  "version": "0.0.1",
-  "description": "simple model plugin for mongo using monk",
-  "main" : "browser.js",
-  "scripts" : [ "browser.js" ]
-}
