@@ -1,9 +1,7 @@
 
 # model-mongo
 
-Mongo plugin for `matthewmueller/model`, based on `component/model`.
-
-Uses `learnboost/monk` for a clean mongo driver.
+Mongo plugin for [modella](https://github.com/matthewmueller/modella). Uses [learnboost/monk](https://github.com/learnboost/monk) for a clean mongo driver.
 
 ## Example
 
@@ -32,6 +30,18 @@ user.name('matt')
 user.save(function(err) {
   console.log(user.toJSON());
 });
+```
+
+## API
+
+By loading this plugin, model inherits:
+
+### model#index(attr, options)
+
+Index an attribute in mongo.
+
+```js
+  User.index('email', { unique : true });
 ```
 
 ## License
