@@ -1,3 +1,9 @@
+0.0.4 / 2013-02-05
+==================
+
+  * casting: in= string=>objectid, out= objectid=>string
+  * added debug
+  * updated save
 
 0.0.3 / 2012-12-28
 ==================

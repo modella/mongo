@@ -1,6 +1,6 @@
 {
   "name": "model-mongo",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "simple model plugin for mongo using monk",
   "keywords": [],
   "author": "matt mueller <mattmuelle@gmail.com>",
