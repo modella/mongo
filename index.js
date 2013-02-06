@@ -43,13 +43,6 @@ sync.all = function(query, options, fn) {
     var model;
 
     debug('got all models %j', models);
-
-    // convert all objectids to strings
-    for (var i = 0, len = models.length; i < len; i++) {
-      model = models[i];
-      if(model._id) model._id = model._id.toString();
-    }
-
     return fn(null, models);
   });
 };
@@ -73,12 +66,7 @@ sync.get = function(query, options, fn) {
   db[action](query, options, function(err, model) {
     if(err) return fn(err);
     else if(!model) return fn(null, false);
-
     debug('got %j', model);
-
-    // convert objectid to string
-    if(model._id) model._id = model._id.toString();
-
     return fn(null, model);
   });
 };
@@ -100,8 +88,6 @@ sync.save = function(fn) {
   debug('saving... %j', json);
   this.model.db.insert(json, function(err, doc) {
     if(err) return fn(err);
-    // convert object to to string
-    doc._id = doc._id.toString();
     debug('saved %j', doc);
     return fn(null, doc);
   });
