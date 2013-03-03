@@ -127,12 +127,13 @@ sync.remove = function(query, fn) {
   var db = this.model.db,
       id = this.primary();
 
-  // convert string id to objectid
-  id = db.id(id);
+  // same reason as above, this time it closes the connect
+  // [Error: connection closed]
+  var sid = id.toString();
 
   if (arguments.length == 1) {
     fn = query;
-    query = { _id : id };
+    query = { _id : sid };
   }
 
   debug('removing %j', query);
