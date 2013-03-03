@@ -105,11 +105,14 @@ sync.update = function(fn) {
   // Mongo won't let you modify _id, even if it's the same
   if(changed._id) delete changed._id;
 
-  // convert string id to objectid
-  id = db.id(id);
+  // TODO: understand why this needs to be .toString()
+  // With ObjectId, you get incredibly strange bugs with compiled BSON
+  // in mongo >= 2.0.8 the line. If _id is object in mongodb node_module
+  // when go to execute, it will give { BSONElement: bad type }
+  var sid = id.toString();
 
   debug('updating %s and settings %j', id, changed);
-  db.findAndModify({ _id : id }, { $set : changed }, function(err, doc) {
+  db.findAndModify({ _id : sid }, { $set : changed }, function(err, doc) {
     if(err) return fn(err);
     debug('updated %j', doc);
     fn();
