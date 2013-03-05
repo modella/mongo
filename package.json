@@ -10,7 +10,7 @@
     "debug": "~0.7.0"
   },
   "devDependencies": {
-    "node-model": "*",
+    "modella": "*",
     "mocha": "*",
     "should": "*",
     "pwd": "*"

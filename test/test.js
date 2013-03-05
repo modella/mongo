@@ -1,4 +1,4 @@
-var model = require('node-model');
+var model = require('modella');
     mongo = require('../')('localhost/model-mongo');
 
 var User = model('user')
