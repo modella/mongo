@@ -23,6 +23,12 @@ module.exports = function(url) {
 };
 
 /**
+ * Sync Name
+ */
+
+sync.name = 'mongo';
+
+/**
  * All
  */
 
