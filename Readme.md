@@ -9,7 +9,7 @@ Mongo plugin for [modella](https://github.com/modella/modella). Uses [learnboost
 ## Example
 
 ```js
-var model = require('node-model');
+var model = require('modella');
     mongo = require('modella-mongo')('localhost/db');
 
 var User = model('user')
