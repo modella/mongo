@@ -12,9 +12,9 @@ var debug = require('debug')('modella:mongo'),
 module.exports = function(url) {
   var monk = require('monk')(url);
 
-  return function(model) {
+  return function(Model) {
     var db = monk.get(model.modelName);
-    model.sync = sync;
+    Model.useSync(sync);
     model.db = db;
 
     // Possibly go with the mixin
