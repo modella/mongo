@@ -13,12 +13,12 @@ module.exports = function(url) {
   var monk = require('monk')(url);
 
   return function(Model) {
-    var db = monk.get(model.modelName);
-    Model.useSync(sync);
-    model.db = db;
+    var db = monk.get(Model.modelName);
+    Model._sync = sync;
+    Model.db = db;
 
     // Possibly go with the mixin
-    model.index = db.index.bind(db);
+    Model.index = db.index.bind(db);
   };
 };
 
