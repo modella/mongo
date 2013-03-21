@@ -19,6 +19,13 @@ module.exports = function(url) {
 
     // Possibly go with the mixin
     Model.index = db.index.bind(db);
+
+    Model.once('initialize', function() {
+      for(var attr in Model.attrs) {
+        var options = Model.attrs[attr];
+        if (options.unique) Model.index(attr, { unique: true } );
+      }
+    });
   };
 };
 
