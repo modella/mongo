@@ -1,5 +1,5 @@
 
-n.n.n / 2013-04-03 
+0.0.10 / 2013-04-03 
 ==================
 
   * Merge pull request #1 from rschmukler/master
@@ -7,6 +7,7 @@ n.n.n / 2013-04-03
   * Release 0.0.9
   * Added unique processing to attr
   * Re-Updated to work with modella version v0.1.0
+
 0.0.9 / 2013-03-22
 ==================
 
