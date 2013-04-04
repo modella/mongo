@@ -15,7 +15,7 @@ var model = require('modella');
 var User = model('user')
   .attr('_id')
   .attr('name')
-  .attr('email')
+  .attr('email', { unique: true })
   .attr('password');
 
 User.use(mongo);
@@ -38,6 +38,17 @@ user.save(function(err) {
 ## API
 
 By loading this plugin, model inherits:
+
+
+### model#attr(attr, options)
+
+Adds the `unique` options to valid attr options. Using unique is equivalent to
+adding a unique index (see below)
+
+```js
+User.attr('username', { unique: true })
+    .attr('email'   , { unique: true });
+```
 
 ### model#index(attr, options)
 
