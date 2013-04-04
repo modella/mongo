@@ -2,7 +2,7 @@
   "name": "modella-mongo",
   "version": "0.0.9",
   "description": "simple model plugin for mongo using monk",
-  "keywords": [],
+  "keywords": ["modella", "mongo", "sync"],
   "author": "matt mueller <mattmuelle@gmail.com>",
   "dependencies": {
     "batch": "~0.2.1",

@@ -12,13 +12,20 @@ var debug = require('debug')('modella:mongo'),
 module.exports = function(url) {
   var monk = require('monk')(url);
 
-  return function(model) {
-    var db = monk.get(model.modelName);
-    model.sync = sync;
-    model.db = db;
+  return function(Model) {
+    var db = monk.get(Model.modelName);
+    Model._sync = sync;
+    Model.db = db;
 
     // Possibly go with the mixin
-    model.index = db.index.bind(db);
+    Model.index = db.index.bind(db);
+
+    Model.once('initialize', function() {
+      for(var attr in Model.attrs) {
+        var options = Model.attrs[attr];
+        if (options.unique) Model.index(attr, { unique: true } );
+      }
+    });
   };
 };
 
