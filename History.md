@@ -1,4 +1,9 @@
 
+0.0.11 / 2013-04-18 
+==================
+
+  * Added errors to modella fields on unique being taken
+
 0.0.10 / 2013-04-03 
 ==================
 
