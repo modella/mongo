@@ -97,10 +97,19 @@ sync.removeAll = function(query, fn) {
  */
 
 sync.save = function(fn) {
-  var json = this.toJSON();
+  var json = this.toJSON(),
+      self = this;
+
   debug('saving... %j', json);
   this.model.db.insert(json, function(err, doc) {
-    if(err) return fn(err);
+    if(err) {
+      // Check for duplicate index
+      if(err.code == 11000) {
+        var attr = err.message.substring(err.message.indexOf('$') + 1, err.message.indexOf('_1'));
+        self.error(attr, 'has already been taken');
+      }
+      return fn(err);
+    }
     debug('saved %j', doc);
     return fn(null, doc);
   });
