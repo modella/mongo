@@ -122,6 +122,7 @@ sync.save = function(fn) {
 sync.update = function(fn) {
   var db = this.model.db,
       id = this.primary(),
+      self = this,
       changed = this.changed();
 
   // Mongo won't let you modify _id, even if it's the same
@@ -135,7 +136,13 @@ sync.update = function(fn) {
 
   debug('updating %s and settings %j', id, changed);
   db.findAndModify({ _id : sid }, { $set : changed }, function(err, doc) {
-    if(err) return fn(err);
+    if(err) {
+      if(err.lastErrorObject.code == 11001) {
+        var attr = err.message.substring(err.message.indexOf('$') + 1, err.message.indexOf('_1'));
+        self.error(attr, 'has already been taken');
+      }
+      return fn(err);
+    }
     debug('updated %j', doc);
     fn();
   });
