@@ -107,6 +107,7 @@ sync.save = function(fn) {
       self = this;
 
   debug('saving... %j', json);
+  fixQuery.call(this, json);
   this.model.db.insert(json, function(err, doc) {
     if(err) {
       // Check for duplicate index
@@ -144,6 +145,8 @@ sync.update = function(fn) {
     sid = id.toHexString();
   else
     sid = id;
+
+  changed = fixQuery.call(this, changed);
 
   debug('updating %s and settings %j', id, changed);
   db.findAndModify({ _id : sid }, { $set : changed }, function(err, doc) {
@@ -200,4 +203,6 @@ function fixQuery(query) {
     if(Model.attrs[key] && Model.attrs[key].references)
       query[key] = Model.db.id(query[key]);
   }
+
+  return query;
 }
