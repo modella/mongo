@@ -49,7 +49,7 @@ sync.all = function(query, options, fn) {
     options = {};
   }
 
-  fixQuery(query);
+  fixQuery.call(this, query);
 
   debug('getting all %j with options %j', query, options);
   this.db.find(query, options, function(err, models) {
@@ -75,10 +75,10 @@ sync.get = function(query, options, fn) {
   }
 
   var action = 'findOne';
-  if ('string' == typeof query) 
+  if ('string' == typeof query)
     action = 'findById';
   else
-    fixQuery(query);
+    fixQuery.call(this, query);
 
   debug('getting %j using %s with %j options...', query, action, options);
   db[action](query, options, function(err, model) {
@@ -94,7 +94,7 @@ sync.get = function(query, options, fn) {
  */
 
 sync.removeAll = function(query, fn) {
-  fixQuery(query);
+  fixQuery.call(this, query);
   this.db.remove(query, fn);
 };
 
@@ -189,8 +189,15 @@ sync.remove = function(query, fn) {
 };
 
 function fixQuery(query) {
+  // Fix monk's query casting
+  var Model;
+  if(this.model)
+    Model = this.model;
+  else
+    Model = this;
+
   for(var key in query) {
-    if(typeof query[key].toHexString == 'function')
-      query[key] = query[key].toHexString();
+    if(Model.attrs[key] && Model.attrs[key].references)
+      query[key] = Model.db.id(query[key]);
   }
 }
