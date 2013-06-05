@@ -49,6 +49,8 @@ sync.all = function(query, options, fn) {
     options = {};
   }
 
+  fixQuery.call(this, query);
+
   debug('getting all %j with options %j', query, options);
   this.db.find(query, options, function(err, models) {
     if (err) return fn(err);
@@ -73,7 +75,10 @@ sync.get = function(query, options, fn) {
   }
 
   var action = 'findOne';
-  if ('string' == typeof query) action = 'findById';
+  if ('string' == typeof query)
+    action = 'findById';
+  else
+    fixQuery.call(this, query);
 
   debug('getting %j using %s with %j options...', query, action, options);
   db[action](query, options, function(err, model) {
@@ -89,6 +94,7 @@ sync.get = function(query, options, fn) {
  */
 
 sync.removeAll = function(query, fn) {
+  fixQuery.call(this, query);
   this.db.remove(query, fn);
 };
 
@@ -101,6 +107,7 @@ sync.save = function(fn) {
       self = this;
 
   debug('saving... %j', json);
+  fixQuery.call(this, json);
   this.model.db.insert(json, function(err, doc) {
     if(err) {
       // Check for duplicate index
@@ -132,7 +139,14 @@ sync.update = function(fn) {
   // With ObjectId, you get incredibly strange bugs with compiled BSON
   // in mongo >= 2.0.8 the line. If _id is object in mongodb node_module
   // when go to execute, it will give { BSONElement: bad type }
-  var sid = id.toString();
+
+  var sid;
+  if(typeof id.toHexString == 'function')
+    sid = id.toHexString();
+  else
+    sid = id;
+
+  changed = fixQuery.call(this, changed);
 
   debug('updating %s and settings %j', id, changed);
   db.findAndModify({ _id : sid }, { $set : changed }, function(err, doc) {
@@ -158,7 +172,11 @@ sync.remove = function(query, fn) {
 
   // same reason as above, this time it closes the connect
   // [Error: connection closed]
-  var sid = id.toString();
+  var sid;
+  if(typeof id.toHexString == 'function')
+    sid = id.toHexString();
+  else
+    sid = id;
 
   if (arguments.length == 1) {
     fn = query;
@@ -172,3 +190,19 @@ sync.remove = function(query, fn) {
     return fn();
   });
 };
+
+function fixQuery(query) {
+  // Fix monk's query casting
+  var Model;
+  if(this.model)
+    Model = this.model;
+  else
+    Model = this;
+
+  for(var key in query) {
+    if(Model.attrs[key] && Model.attrs[key].references)
+      query[key] = Model.db.id(query[key]);
+  }
+
+  return query;
+}
