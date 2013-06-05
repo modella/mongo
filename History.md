@@ -1,4 +1,9 @@
 
+0.1.0 / 2013-06-05 
+==================
+
+ * Added references option to  auto-cast object IDs
+
 0.0.12 / 2013-05-01 
 ==================
   * Fixed unique errors not showing up on update
