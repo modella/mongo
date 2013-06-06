@@ -200,8 +200,11 @@ function fixQuery(query) {
     Model = this;
 
   for(var key in query) {
-    if(Model.attrs[key] && Model.attrs[key].references)
+    if(Model.attrs[key] && Model.attrs[key].references) {
+      if(query[key].toHexString)
+        query[key] = query[key].toHexString();
       query[key] = Model.db.id(query[key]);
+    }
   }
 
   return query;
