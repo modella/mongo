@@ -23,7 +23,7 @@ module.exports = function(url) {
     Model.once('initialize', function() {
       for(var attr in Model.attrs) {
         var options = Model.attrs[attr];
-        if (options.unique) Model.index(attr, { unique: true } );
+        if (options.unique) Model.index(attr, { unique: true, sparse: true } );
       }
     });
   };
