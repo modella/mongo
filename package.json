@@ -1,6 +1,6 @@
 {
   "name": "modella-mongo",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "simple model plugin for mongo using monk",
   "keywords": ["modella", "mongo", "sync"],
   "author": "matt mueller <mattmuelle@gmail.com>",
