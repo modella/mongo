@@ -1,4 +1,14 @@
 
+0.1.3 / 2013-10-11 
+==================
+
+  * Implemented mquery support
+
+0.1.2 / 2013-10-02 
+==================
+
+  * Added sparse indexing to unique options in modella
+
 0.1.1 / 2013-06-05 
 ==================
 
