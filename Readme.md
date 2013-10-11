@@ -58,6 +58,22 @@ Index an attribute in mongo.
   User.index('email', { unique : true });
 ```
 
+## mquery support
+
+`modella-mongo` provides a wrapped version of the wonderful [mquery](https://github.com/aheckmann/mquery) 
+query builder. To get it, simply call `Model.query()`.
+This allows you to build readable and robust queries easily. When approprirate,
+modella-mongo will return instances of `modella` models, instead of just
+documents. Aside from that, it follows the `mquery` API completely.
+
+### Example with mquery
+
+```js
+  User.query().findOne().where({username: 'Bob'}).exec(function(err, u) {
+    u.username() // => 'Bob'
+  });
+```
+
 ## A Note about connection usage
 
 Each call to `modella-mongo` will open up a mongo connection, and return a function that can be used as a plugin for ANY Modella model. 
