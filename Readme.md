@@ -74,6 +74,26 @@ documents. Aside from that, it follows the `mquery` API completely.
   });
 ```
 
+## maggregate support
+
+`modella-mongo` uses the [maggregate](https://github.com/rschmukler/maggregate) 
+aggregation builder. To use it, simply call `Model.aggregate()`.
+
+This allows you to build readable aggregations easily. By default it wraps
+responses in `Model` instances, but can be disabled by passing `skipWrap` as
+`true`. It also follows the `maggregate` api completely.
+
+### Example with maggregate
+
+```js
+var skipWrapping = true;
+User.aggregate(skipWrapping).group({_id: '$location', locationCount: {$sum: 1}}, function(err, res) {
+  res.forEach(function(loc) {
+    console.log("In location %s there are %d users", loc._id, loc.locationCount);
+  });
+});
+```
+
 ## A Note about connection usage
 
 Each call to `modella-mongo` will open up a mongo connection, and return a function that can be used as a plugin for ANY Modella model. 
