@@ -1,6 +1,7 @@
 # mongo
 
-Mongo plugin for [modella](https://github.com/modella/modella). Uses [learnboost/monk](https://github.com/learnboost/monk) for a clean mongo driver.
+Mongo plugin for [modella](https://github.com/modella/modella). Thinly built on
+top of [kissjs/node-mongoskin](https://github.com/kissjs/node-mongoskin).
 
 ## Installation
 
