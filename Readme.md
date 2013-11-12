@@ -26,37 +26,103 @@ User.use(mongo);
 
 var user = new User;
 
-user.name('matt')
-    .email('mattmuelle@gmail.com')
-    .password('test');
+user.name('matt');
 
 user.save(function(err) {
   console.log(user.toJSON());
 });
 ```
 
+## Implemented Sync Layer Methods
+
+By adding the plugin, modella 0.2.0 compliant sync layer methods are added. This
+enables `instance#save()` and `instance#remove()` to work with mongo.
+
 ## API
 
 By loading this plugin, model inherits:
 
+### Model.db
 
-### model#attr(attr, options)
+Object pointing to the raw [mongoskin](https://github.com/kissjs/node-mongoskin) database. Use it to manipulate the collection directly.
 
-Adds the `unique` options to valid attr options. Using unique is equivalent to
-adding a unique index (see below)
-
-```js
-User.attr('username', { unique: true })
-    .attr('email'   , { unique: true });
-```
-
-### model#index(attr, options)
+### Model#index(attr, options)
 
 Index an attribute in mongo.
 
 ```js
   User.index('email', { unique : true });
 ```
+
+Alternatively, you can specify `unique: true` when defining an attribute.
+
+```js
+User.attr('username', {unique: true});
+
+// Equivilent to...
+User.attr('username');
+User.index('username', {unique: true, sparse: true});
+```
+
+### Model.all(query, [options], fn)
+
+Queries for all users in the collection that match the given `query`. Additional
+options can be passed in (eg. `{sort: {age: -1}}`). 
+
+Calls `fn(err, instances)` where `instances` is an array of Model instances. If
+no queries match, `instances` will be `false`.
+
+```js
+  User.all({emailConfirmed: true}, {sort: {emailConfirmationDate: 1}}, function(err, users) {
+    console.log("Users with confirmed emails: ");
+    users.forEach(function(u) {
+      console.log(u.username());
+    });
+  });
+```
+
+### Model.get(query, [options], fn)
+
+Queries for one user in the collection that match the given `query`. Additional
+options can be passed in (eg. `{sort: {age: -1}}`). 
+
+`query` can also be a string, in which case it will be converted to an
+`ObjectId`.
+
+Calls `fn(err, instance)` where `instance` is an instance of Model. If
+no queries match, `instance` will be `false`.
+
+```js
+  User.get('528263fa996abeabbe000002', function(err, u) {
+    console.log(u.username());
+  });
+```
+
+Calls `fn(err, instances)` where `instances` is an array of Model instances. If
+no queries match, instances will be `false`.
+
+### Model.removeAll(query, [options], fn)
+
+Removes all records that match the given `query`.
+
+Calls `fn(err, count)` where `count` is the number of records removed. If
+no queries match, instances will be `false`.
+
+
+```js
+  User.removeAll({emailConfirmed: false}, function(err, count) {
+    console.log("%d users were deleted", count);
+  });
+```
+
+### Model.query()
+
+Returns a wrapped instances of `mquery`. See [mquery support](#mquery-support) below.
+
+### Model.aggregate()
+
+Returns a wrapped instances of `maggregate`. See [maggregate support](#maggregate-support) below.
+
 
 ## mquery support
 
