@@ -1,4 +1,7 @@
-# mongo
+# Modella-Mongo
+[![Build Status](https://api.travis-ci.org/modella/mongo.png)](http://travis-ci.org/modella/mongo) 
+[![Coverage
+Status](https://coveralls.io/repos/modella/mongo/badge.png)](https://coveralls.io/r/modella/mongo)
 
 Mongo plugin for [modella](https://github.com/modella/modella). Thinly built on
 top of [kissjs/node-mongoskin](https://github.com/kissjs/node-mongoskin).

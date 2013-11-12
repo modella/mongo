@@ -7,6 +7,13 @@
     "mongo",
     "sync"
   ],
+  "scripts": {
+    "test": "make test-once",
+    "blanket": {
+      "pattern": "lib",
+      "data-cover-never": "node_modules"
+    }
+  },
   "author": "Ryan Schmukler <ryan@slingingcode.com>",
   "dependencies": {
     "batch": "~0.2.1",
@@ -19,7 +26,9 @@
     "modella": "*",
     "mocha": "*",
     "expect.js": "*",
-    "batch": "~0.2.1"
+    "batch": "~0.2.1",
+    "blanket": "~1.1.5",
+    "coveralls": "~2.3.0"
   },
   "main": "index"
 }
