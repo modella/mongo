@@ -1,4 +1,10 @@
 
+0.2.1 / 2013-11-13 
+==================
+
+ * Updated API to be more similar to pre-0.2.0
+ * Updated devDependency version pinning on package.json
+
 0.2.0 / 2013-11-12 
 ==================
 
