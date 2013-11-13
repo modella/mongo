@@ -61,15 +61,17 @@ describe("Modella-Mongo", function() {
 
     describe("update", function() {
       it("updates an existing record in the database", function(done) {
-        var user = new User({name: 'Bob'});
-        user.save();
-        user.name('Eddie');
-        user.save(function(err, u) {
-          expect(err).to.not.be.ok();
-          col.findOne({name: 'Eddie'}, function(err, u) {
-            expect(u).to.be.ok();
-            expect(u).to.have.property('name', 'Eddie');
-            done();
+        var user = new User({name: 'Bob', age: 30});
+        user.save(function() {
+          user.name('Eddie');
+          user.save(function(err, u) {
+            expect(err).to.not.be.ok();
+            col.findOne({name: 'Eddie'}, function(err, u) {
+              expect(u).to.be.ok();
+              expect(u).to.have.property('name', 'Eddie');
+              expect(u).to.have.property('age', 30);
+              done();
+            });
           });
         });
       });
