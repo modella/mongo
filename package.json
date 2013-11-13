@@ -29,7 +29,8 @@
     "expect.js": "*",
     "batch": "~0.2.1",
     "blanket": "~1.1.5",
-    "coveralls": "~2.3.0"
+    "coveralls": "~2.3.0",
+    "mocha-lcov-reporter": "0.0.1"
   },
   "main": "index"
 }
