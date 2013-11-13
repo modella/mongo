@@ -74,7 +74,7 @@ Queries for all users in the collection that match the given `query`. Additional
 options can be passed in (eg. `{sort: {age: -1}}`). 
 
 Calls `fn(err, instances)` where `instances` is an array of Model instances. If
-no queries match, `instances` will be `false`.
+no documents match, `instances` will be empty.
 
 ```js
   User.all({emailConfirmed: true}, {sort: {emailConfirmationDate: 1}}, function(err, users) {
@@ -85,7 +85,7 @@ no queries match, `instances` will be `false`.
   });
 ```
 
-### Model.get(query, [options], fn)
+### Model.find/get(query, [options], fn)
 
 Queries for one user in the collection that match the given `query`. Additional
 options can be passed in (eg. `{sort: {age: -1}}`). 
@@ -94,10 +94,12 @@ options can be passed in (eg. `{sort: {age: -1}}`).
 `ObjectId`.
 
 Calls `fn(err, instance)` where `instance` is an instance of Model. If
-no queries match, `instance` will be `false`.
+no documents match, `instance` will be `false`.
 
 ```js
-  User.get('528263fa996abeabbe000002', function(err, u) {
+  User.get == User.find // true
+
+  User.find('528263fa996abeabbe000002', function(err, u) {
     console.log(u.username());
   });
 ```

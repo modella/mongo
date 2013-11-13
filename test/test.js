@@ -116,10 +116,11 @@ describe("Modella-Mongo", function() {
     });
 
     describe("Model.all", function() {
-      it("returns false if no records match", function(done) {
+      it("returns empty array if no records match", function(done) {
         User.all({name: 'brobobski'}, function(err, users) {
           expect(err).to.not.be.ok();
-          expect(users).to.not.be.ok();
+          expect(users).to.be.a(Array);
+          expect(users).to.have.length(0);
           done();
         });
       });
@@ -142,6 +143,9 @@ describe("Modella-Mongo", function() {
     });
 
     describe("Model.get", function() {
+      it("aliases to Model.find", function() {
+        expect(User.get).to.be(User.find);
+      });
       it("returns false if the model doesn't exist", function(done) {
         User.get({name: 'lsadkfjsadlkf'}, function(err, u) {
           expect(err).to.not.be.ok();
