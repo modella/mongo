@@ -1,5 +1,11 @@
 
-n.n.n / 2013-11-13 
+0.2.3 / 2013-11-14 
+==================
+
+ * Fixed an issue where on update we weren't returning the new attrs
+ * Rely on Mquery for MongoDb Dependency
+
+0.2.2 / 2013-11-13 
 ==================
 
  * Fixed update and update test
