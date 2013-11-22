@@ -169,6 +169,13 @@ describe("Modella-Mongo", function() {
           done();
         });
       });
+      it("converts a string in _id to a ID", function(done) {
+        User.get({_id: user.primary().toString()}, function(err, u) {
+          expect(u).to.be.ok();
+          expect(u).to.be.a(User);
+          done();
+        });
+      });
       it("forwards options", function(done) {
         User.get({name: 'steven'}, {sort: {age: -1}}, function(err, u) {
           expect(u.age()).to.be(60);
