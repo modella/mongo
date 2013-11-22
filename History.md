@@ -1,4 +1,9 @@
 
+0.2.4 / 2013-11-22 
+==================
+
+ * Added conversion of _id strings to proper Id for find/get
+
 0.2.3 / 2013-11-14 
 ==================
 
