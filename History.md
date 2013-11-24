@@ -1,4 +1,10 @@
 
+n.n.n / 2013-11-23 
+==================
+
+ * Used version pinned version of mongoskin
+ * Temporary re-point mongoskin to version pinned version
+
 0.2.4 / 2013-11-22 
 ==================
 
