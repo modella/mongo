@@ -20,7 +20,7 @@
     "debug": "~0.7.0",
     "mquery": "0.3.3",
     "maggregate": "~0.1.0",
-    "mongoskin": "git://github.com/rschmukler/node-mongoskin.git#master"
+    "mongoskin": "0.6.1"
   },
   "devDependencies": {
     "modella": "0.2.0",
