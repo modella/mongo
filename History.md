@@ -1,4 +1,9 @@
 
+0.2.7 / 2013-12-31 
+==================
+
+ * Made it so passing undefined in to get/find will not return a model
+
 0.2.6 / 2013-11-24 
 ==================
 
