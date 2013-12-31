@@ -176,6 +176,14 @@ describe("Modella-Mongo", function() {
           done();
         });
       });
+
+      it("returns false if undefined is passed in", function(done) {
+        User.get(undefined, function(err, u) {
+          expect(u).to.not.be.ok();
+          done();
+        });
+      });
+
       it("forwards options", function(done) {
         User.get({name: 'steven'}, {sort: {age: -1}}, function(err, u) {
           expect(u.age()).to.be(60);
