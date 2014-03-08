@@ -211,8 +211,10 @@ describe("Modella-Mongo", function() {
     });
 
     describe("Model.query", function() {
-      it("returns an instance of mquery", function() {
-        expect(User.query()).to.be.a(mquery);
+      it("returns a new instance of mquery", function() {
+        var queryA = User.query(),
+            queryB = User.query();
+        expect(queryA).to.not.be(queryB);
       });
 
       it("wraps the mquery methods", function(done) {
