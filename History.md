@@ -1,4 +1,9 @@
 
+0.2.8 / 2014-03-08 
+==================
+
+ * fix Model.query() not returning new instances of mquery [closes #8]
+
 0.2.7 / 2013-12-31 
 ==================
 
