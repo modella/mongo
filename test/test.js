@@ -29,6 +29,18 @@ describe("Modella-Mongo", function() {
     col.remove({}, done);
   });
 
+  describe("collection", function() {
+    it("sets the collection name", function() {
+      var Foo = modella('Foo').use(mongo('bar'));
+      expect(Foo.db.collection.collectionName).to.be('bar');
+    });
+
+    it("sets a default collection name", function() {
+      var Baz = modella('Baz').use(mongo);
+      expect(Baz.db.collection.collectionName).to.be('Baz');
+    });
+  });
+
   describe("sync layer operations", function() {
     it("defines the required sync layer operations", function() {
       expect(User.save).to.be.a('function');
