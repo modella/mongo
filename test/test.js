@@ -29,6 +29,18 @@ describe("Modella-Mongo", function() {
     col.remove({}, done);
   });
 
+  describe("collection", function() {
+    it("sets the collection name", function() {
+      var Foo = modella('Foo').use(mongo('bar'));
+      expect(Foo.db.collection.collectionName).to.be('bar');
+    });
+
+    it("sets a default collection name", function() {
+      var Baz = modella('Baz').use(mongo);
+      expect(Baz.db.collection.collectionName).to.be('Baz');
+    });
+  });
+
   describe("sync layer operations", function() {
     it("defines the required sync layer operations", function() {
       expect(User.save).to.be.a('function');
@@ -180,6 +192,21 @@ describe("Modella-Mongo", function() {
           done();
         });
       });
+      it("converts a string in _id to a ID", function(done) {
+        User.get({_id: user.primary().toString()}, function(err, u) {
+          expect(u).to.be.ok();
+          expect(u).to.be.a(User);
+          done();
+        });
+      });
+
+      it("returns false if undefined is passed in", function(done) {
+        User.get(undefined, function(err, u) {
+          expect(u).to.not.be.ok();
+          done();
+        });
+      });
+
       it("forwards options", function(done) {
         User.get({name: 'steven'}, {sort: {age: -1}}, function(err, u) {
           expect(u.age()).to.be(60);
@@ -207,8 +234,10 @@ describe("Modella-Mongo", function() {
     });
 
     describe("Model.query", function() {
-      it("returns an instance of mquery", function() {
-        expect(User.query()).to.be.a(mquery);
+      it("returns a new instance of mquery", function() {
+        var queryA = User.query(),
+            queryB = User.query();
+        expect(queryA).to.not.be(queryB);
       });
 
       it("wraps the mquery methods", function(done) {

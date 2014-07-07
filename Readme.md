@@ -42,9 +42,30 @@ user.save(function(err) {
 By adding the plugin, modella 0.2.0 compliant sync layer methods are added. This
 enables `instance#save()` and `instance#remove()` to work with mongo.
 
+## Configuration
+
+By default, `modella-mongo` will use `Model.modelName` for the Collection. For example:
+
+```js
+var mongo = require('modella-mongo')(connectionString);
+
+var User = modella('User');
+User.use(mongo); // Uses db.User
+```
+
+If you want, you can also specify a collection name yourself by passing it as a function to `mongo`. For example:
+
+```js
+var mongo = require('modella-mongo')(connectionString);
+
+var User = modella('User');
+User.use(mongo('Account')); // Uses db.Account
+```
+
+
 ## API
 
-By loading this plugin, model inherits:
+By loading this plugin, `Model` inherits:
 
 ### Model.db
 

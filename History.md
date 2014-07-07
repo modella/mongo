@@ -1,4 +1,29 @@
 
+0.2.8 / 2014-03-08 
+==================
+
+ * fix Model.query() not returning new instances of mquery [closes #8]
+
+0.2.7 / 2013-12-31 
+==================
+
+ * Made it so passing undefined in to get/find will not return a model
+
+0.2.6 / 2013-11-24 
+==================
+
+ * Switched back to Mongoskin official
+
+0.2.5 / 2013-11-23 
+==================
+
+ * Temporary re-point mongoskin to version pinned version
+
+0.2.4 / 2013-11-22 
+==================
+
+ * Added conversion of _id strings to proper Id for find/get
+
 0.2.3 / 2013-11-14 
 ==================
 
