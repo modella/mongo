@@ -76,6 +76,17 @@ describe("Modella-Mongo", function() {
         });
       });
 
+      it("doesn't call mongo if nothing changed (needed for mongo 2.6+)", function(done) {
+        var user = new User({name: 'Ted'});
+        user.save(function() {
+          user.name('Ted');
+          user.save(function(err) {
+            expect(err).to.be(null);
+            done();
+          });
+        });
+      });
+
       it("triggers errors if there is an error", function(done) {
         var user = new User({name: 'Steve Holt'});
         user.save(function(err) {
