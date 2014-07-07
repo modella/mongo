@@ -1,4 +1,9 @@
 
+0.2.9 / 2014-07-07 
+==================
+
+ * add bug fix for saving unchanged models when nothing changed on mongo 2.6+
+
 0.2.8 / 2014-03-08 
 ==================
 
