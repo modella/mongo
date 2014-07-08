@@ -1,4 +1,9 @@
 
+0.2.10 / 2014-07-08 
+==================
+
+ * fix bug where non-changing models would cause all attrs to be undefined
+
 0.2.9 / 2014-07-07 
 ==================
 
