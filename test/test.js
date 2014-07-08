@@ -94,6 +94,7 @@ describe("Modella-Mongo", function() {
           user.name('Ted');
           user.save(function(err) {
             expect(err).to.be(null);
+            expect(user.name()).to.be('Ted');
             done();
           });
         });
