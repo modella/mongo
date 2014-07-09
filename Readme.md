@@ -62,6 +62,17 @@ var User = modella('User');
 User.use(mongo('Account')); // Uses db.Account
 ```
 
+## Attribute Configuration
+
+### 'unique'
+
+This will create a unique index for the attribute
+
+### 'atomic'
+
+Uses the `'$inc'` update modifier for mongo, allowing a value to be (de)incremented as needed, rather than using `'$set'` each time.
+
+This only works for number attributes.
 
 ## API
 
