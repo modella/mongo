@@ -1,9 +1,11 @@
 var modella = require('modella'),
     mongo = require('../')('localhost:27017/modella-mongo'),
+    mongoskin = require('mongoskin'),
     db = require('mongoskin').db('localhost:27017/modella-mongo', {w: 1}),
     mquery = require('mquery'),
     maggregate = require('maggregate'),
     Batch = require('batch'),
+    async = require('async'),
     expect = require('expect.js');
 
 var User = modella('User')
@@ -13,7 +15,18 @@ var User = modella('User')
   .attr('email', {unique: true})
   .attr('password');
 
+var AtomicUser = modella('AtomicUser')
+  .attr('_id')
+  .attr('name')
+  .attr('age', {atomic: true})
+  .attr('wage', {atomic: true})
+  .attr('points', {atomic: true})
+  .attr('email', {unique: true})
+  .attr('password');
+
+
 User.use(mongo);
+AtomicUser.use(mongo);
 
 /**
  * Initialize
@@ -22,11 +35,14 @@ User.use(mongo);
 var user = new User();
 
 var col = db.collection("User");
+var atomiccol = db.collection("AtomicUser");
 
 
 describe("Modella-Mongo", function() {
   before(function(done) {
-    col.remove({}, done);
+    col.remove({}, function() {
+      atomiccol.remove({}, done);
+    });
   });
 
   describe("collection", function() {
@@ -88,6 +104,75 @@ describe("Modella-Mongo", function() {
         });
       });
 
+      it("updates an existing record in the database with a string for _id", function(done) {
+        var user = new User({_id: (new mongoskin.ObjectID()).toHexString(), name: 'Bob', age: 30});
+        user.save(function() {
+          user.name('Eddie');
+          user.save(function(err, u) {
+            expect(err).to.not.be.ok();
+            col.findOne({name: 'Eddie'}, function(err, u) {
+              expect(u).to.be.ok();
+              expect(u).to.have.property('name', 'Eddie');
+              expect(u).to.have.property('age', 30);
+              done();
+            });
+          });
+        });
+      });
+
+      it("updates an atomic property using $inc", function(done) {
+        var user = new AtomicUser({name: 'Eddie', age: 30, wage: 7.75});
+        user.save(function(err) {
+          expect(err).to.not.be.ok();
+          async.parallel([
+            function(finished) {
+              user.age("29");
+              user.wage("7.50");
+              user.save(function(err) {
+                expect(err).to.not.be.ok();
+                atomiccol.findOne({name: 'Eddie'}, function(err, u) {
+                  expect(u).to.be.ok();
+                  expect(u).to.have.property('name', 'Eddie');
+                  expect(u).to.have.property('age', 31);
+                  expect(u).to.have.property('wage', 8.25);
+                  finished();
+                });
+              });
+            },
+            function(finished) {
+              user.age(31);
+              user.wage(8.25);
+              user.points(3);
+              user.save(function(err, u) {
+                expect(err).to.not.be.ok();
+                atomiccol.findOne({name: 'Eddie'}, function(err, u) {
+                  expect(u).to.be.ok();
+                  expect(u).to.have.property('name', 'Eddie');
+                  expect(u).to.have.property('age', 31);
+                  expect(u).to.have.property('wage', 8.25);
+                });
+                finished();
+              });
+            }
+          ], function() {
+            done();
+          });
+        });
+      });
+
+      it("refuses to update a non-number atomic property", function(done) {
+        var user = new AtomicUser({name: 'Eddie', age: 30});
+        user.save(function(err) {
+          expect(err).to.not.be.ok();
+          user.age("foo");
+          user.save(function(err) {
+            expect(err).to.be.ok();
+            expect(err.message).to.be("Atomic property age set to NaN");
+            done();
+          });
+        });
+      });
+
       it("doesn't call mongo if nothing changed (needed for mongo 2.6+)", function(done) {
         var user = new User({name: 'Ted'});
         user.save(function() {
@@ -116,9 +201,24 @@ describe("Modella-Mongo", function() {
     describe("remove", function() {
       it("removes an existing record from the database", function(done) {
         var tony = new User({name: 'Tony'});
-        tony.save(function() {
+        tony.save(function(err) {
+          expect(err).to.not.be.ok();
           tony.remove(function() {
             col.find({name: 'Tony'}).toArray(function(err, docs) {
+              expect(err).to.not.be.ok();
+              expect(docs).to.have.length(0);
+              done();
+            });
+          });
+        });
+      });
+      it("removes an existing record from the database with a string _id", function(done) {
+        var tony = new User({_id: (new mongoskin.ObjectID()).toHexString(), name: 'Tony'});
+        tony.save(function(err) {
+          expect(err).to.not.be.ok();
+          tony.remove(function() {
+            col.find({name: 'Tony'}).toArray(function(err, docs) {
+              expect(err).to.not.be.ok();
               expect(docs).to.have.length(0);
               done();
             });
@@ -219,7 +319,7 @@ describe("Modella-Mongo", function() {
     describe("Model.removeAll", function() {
       before(function(done) {
         var batch = new Batch(),
-            user;
+        user;
         for(var i = 0; i < 5; ++i) {
           user = new User({name: 'soonToBeDeleted'});
           batch.push(user.save.bind(user));
@@ -237,7 +337,7 @@ describe("Modella-Mongo", function() {
     describe("Model.query", function() {
       it("returns a new instance of mquery", function() {
         var queryA = User.query(),
-            queryB = User.query();
+        queryB = User.query();
         expect(queryA).to.not.be(queryB);
       });
 
