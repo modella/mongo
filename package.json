@@ -7,12 +7,14 @@
     "mongo",
     "sync"
   ],
-  "scripts": {
-    "test": "make test-once",
+  "config": {
     "blanket": {
       "pattern": "lib",
       "data-cover-never": "node_modules"
     }
+  },
+  "scripts": {
+    "test": "make test-once"
   },
   "author": "Ryan Schmukler <ryan@slingingcode.com>",
   "dependencies": {
@@ -23,13 +25,14 @@
     "mongoskin": "0.6.1"
   },
   "devDependencies": {
-    "modella": "0.2.0",
-    "mocha": "*",
-    "expect.js": "*",
+    "async": "^0.9.0",
     "batch": "~0.2.1",
     "blanket": "~1.1.5",
     "coveralls": "~2.3.0",
-    "mocha-lcov-reporter": "0.0.1"
+    "expect.js": "*",
+    "mocha": "*",
+    "mocha-lcov-reporter": "0.0.1",
+    "modella": "0.2.0"
   },
   "main": "index"
 }
