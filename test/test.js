@@ -272,6 +272,24 @@ describe("Modella-Mongo", function() {
         });
       });
 
+      it("uses $uset to remove undefined properties", function(done) {
+        var user = new User({name: 'Eddie', age: 30, email: "eddie@eddiecorp.com"});
+        user.save(function(err) {
+          expect(err).to.not.be.ok();
+          expect(user.email()).to.be("eddie@eddiecorp.com");
+          user.set({
+            email: undefined,
+            password: 'password'
+          });
+          user.save(function(err) {
+            expect(err).to.not.be.ok();
+            expect(user.email() === undefined).to.be(true);
+            expect(user.password()).to.be('password');
+            done();
+          });
+        });
+      });
+
       it("refuses to update a non-number atomic property", function(done) {
         var user = new AtomicUser({name: 'Eddie', age: 30});
         user.save(function(err) {
