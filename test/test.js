@@ -24,9 +24,16 @@ var AtomicUser = modella('AtomicUser')
   .attr('email', {unique: true})
   .attr('password');
 
+var Ticket = modella('ticket')
+  .attr('_id')
+  .attr('created', {type: 'date'})
+  .attr('viewed', {type: Date})
+  .attr('message', {type: 'string'});
+
 
 User.use(mongo);
 AtomicUser.use(mongo);
+Ticket.use(mongo);
 
 /**
  * Initialize
@@ -85,6 +92,21 @@ describe("Modella-Mongo", function() {
           done();
         });
       });
+
+      it("parses a string as a date if the type is set to `'date'` or `Date`", function(done) {
+        var ticket = new Ticket({
+          created: '2014-01-01',
+          viewed: '2014-01-02',
+          message: 'Foo to you sir'
+        });
+
+        ticket.save(function(err) {
+          expect(ticket.created() instanceof Date).to.be(true);
+          expect(ticket.viewed() instanceof Date).to.be(true);
+          done();
+        });
+      });
+
     });
 
     describe("update", function() {
@@ -116,6 +138,24 @@ describe("Modella-Mongo", function() {
               expect(u).to.have.property('age', 30);
               done();
             });
+          });
+        });
+      });
+
+      it("parses a string as a date if the type is set to `'date'` or `Date`", function(done) {
+        var ticket = new Ticket({
+          created: '2014-01-01',
+          viewed: '2014-01-02',
+          message: 'Foo to you sir'
+        });
+
+        ticket.save(function(err) {
+          expect(ticket.created() instanceof Date).to.be(true);
+          expect(ticket.viewed() instanceof Date).to.be(true);
+          ticket.viewed('2014-01-03');
+          ticket.save(function(err) {
+            expect(ticket.viewed() instanceof Date).to.be(true);
+            done();
           });
         });
       });
