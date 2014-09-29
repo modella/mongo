@@ -24,7 +24,7 @@ var AtomicUser = modella('AtomicUser')
   .attr('email', {unique: true})
   .attr('password');
 
-var Ticket = modella('ticket')
+var Ticket = modella('Ticket')
   .attr('_id')
   .attr('created', {type: 'date'})
   .attr('viewed', {type: Date})
@@ -46,12 +46,15 @@ var user = new User();
 
 var col = db.collection("User");
 var atomiccol = db.collection("AtomicUser");
+var ticketcol = db.collection("Ticket");
 
 
 describe("Modella-Mongo", function() {
   before(function(done) {
     col.remove({}, function() {
-      atomiccol.remove({}, done);
+      ticketcol.remove({}, function() {
+        atomiccol.remove({}, done);
+      });
     });
   });
 
