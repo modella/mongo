@@ -272,7 +272,7 @@ describe("Modella-Mongo", function() {
         });
       });
 
-      it("uses $uset to remove undefined properties", function(done) {
+      it("uses $unset to remove undefined properties", function(done) {
         var user = new User({name: 'Eddie', age: 30, email: "eddie@eddiecorp.com"});
         user.save(function(err) {
           expect(err).to.not.be.ok();
@@ -286,6 +286,25 @@ describe("Modella-Mongo", function() {
             expect(user.email() === undefined).to.be(true);
             expect(user.password()).to.be('password');
             done();
+          });
+        });
+      });
+
+      it("does not $unset when a value is not explicitly set to `undefined`", function(done) {
+        var user = new User({name: 'Eddie', age: 30, email: "eddie@eddiecorp.com"});
+        user.save(function(err) {
+          expect(err).to.not.be.ok();
+          expect(user.email()).to.be("eddie@eddiecorp.com");
+          // load an incomplete user record
+          User.get(user.primary().toHexString(), {fields: {age: true}}, function(err, user2) {
+            user2.age(user2.age() + 1);
+            console.log(user2);
+            user2.save(function(err) {
+              expect(err).to.not.be.ok();
+              expect(user2.email()).to.be("eddie@eddiecorp.com");
+              expect(user2.age()).to.be(31);
+              done();
+            });
           });
         });
       });
