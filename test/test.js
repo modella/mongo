@@ -28,7 +28,8 @@ var Ticket = modella('ticket')
   .attr('_id')
   .attr('created', {type: 'date'})
   .attr('viewed', {type: Date})
-  .attr('message', {type: 'string'});
+  .attr('message', {type: 'string'})
+  .attr('creatorId', {type: mongoskin.ObjectID});
 
 
 User.use(mongo);
@@ -107,6 +108,24 @@ describe("Modella-Mongo", function() {
         });
       });
 
+      it("parses a string as an ObjectID if the type is set to `ObjectID`", function(done) {
+        var oid = new mongoskin.ObjectID();
+        var ticket = new Ticket({
+          created: '2014-01-01',
+          viewed: '2014-01-02',
+          message: 'Foo to you sir',
+          creatorId: oid.toHexString()
+        });
+
+        ticket.save(function(err) {
+          expect(ticket.created() instanceof Date).to.be(true);
+          expect(ticket.viewed() instanceof Date).to.be(true);
+          expect(ticket.creatorId() instanceof mongoskin.ObjectID).to.be(true);
+          expect(ticket.creatorId().equals(oid)).to.be(true);
+          done();
+        });
+      });
+
     });
 
     describe("update", function() {
@@ -155,6 +174,32 @@ describe("Modella-Mongo", function() {
           ticket.viewed('2014-01-03');
           ticket.save(function(err) {
             expect(ticket.viewed() instanceof Date).to.be(true);
+            done();
+          });
+        });
+      });
+
+      it("parses a string as an ObjectID if the type is set to `ObjectID`", function(done) {
+        var oid = new mongoskin.ObjectID();
+        var ticket = new Ticket({
+          created: '2014-01-01',
+          viewed: '2014-01-02',
+          message: 'Foo to you sir',
+          creatorId: oid.toHexString()
+        });
+
+        ticket.save(function(err) {
+          expect(ticket.created() instanceof Date).to.be(true);
+          expect(ticket.viewed() instanceof Date).to.be(true);
+          expect(ticket.creatorId() instanceof mongoskin.ObjectID).to.be(true);
+          expect(ticket.creatorId().equals(oid)).to.be(true);
+          ticket.viewed('2014-01-03');
+          var newOid = new mongoskin.ObjectID();
+          ticket.creatorId(newOid.toHexString());
+          ticket.save(function(err) {
+            expect(ticket.viewed() instanceof Date).to.be(true);
+            expect(ticket.creatorId() instanceof mongoskin.ObjectID).to.be(true);
+            expect(ticket.creatorId().equals(newOid)).to.be(true);
             done();
           });
         });
