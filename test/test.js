@@ -24,7 +24,7 @@ var AtomicUser = modella('AtomicUser')
   .attr('email', {unique: true})
   .attr('password');
 
-var Ticket = modella('ticket')
+var Ticket = modella('Ticket')
   .attr('_id')
   .attr('created', {type: 'date'})
   .attr('viewed', {type: Date})
@@ -46,12 +46,15 @@ var user = new User();
 
 var col = db.collection("User");
 var atomiccol = db.collection("AtomicUser");
+var ticketcol = db.collection("Ticket");
 
 
 describe("Modella-Mongo", function() {
   before(function(done) {
     col.remove({}, function() {
-      atomiccol.remove({}, done);
+      ticketcol.remove({}, function() {
+        atomiccol.remove({}, done);
+      });
     });
   });
 
@@ -268,6 +271,42 @@ describe("Modella-Mongo", function() {
             }
           ], function() {
             done();
+          });
+        });
+      });
+
+      it("uses $unset to remove undefined properties", function(done) {
+        var user = new User({name: 'Eddie', age: 30, email: "eddie@eddiecorp.com"});
+        user.save(function(err) {
+          expect(err).to.not.be.ok();
+          expect(user.email()).to.be("eddie@eddiecorp.com");
+          user.set({
+            email: undefined,
+            password: 'password'
+          });
+          user.save(function(err) {
+            expect(err).to.not.be.ok();
+            expect(user.email() === undefined).to.be(true);
+            expect(user.password()).to.be('password');
+            done();
+          });
+        });
+      });
+
+      it("does not $unset when a value is not explicitly set to `undefined`", function(done) {
+        var user = new User({name: 'Eddie', age: 30, email: "eddie@eddiecorp.com"});
+        user.save(function(err) {
+          expect(err).to.not.be.ok();
+          expect(user.email()).to.be("eddie@eddiecorp.com");
+          // load an incomplete user record
+          User.get(user.primary().toHexString(), {fields: {age: true}}, function(err, user2) {
+            user2.age(user2.age() + 1);
+            user2.save(function(err) {
+              expect(err).to.not.be.ok();
+              expect(user2.email()).to.be("eddie@eddiecorp.com");
+              expect(user2.age()).to.be(31);
+              done();
+            });
           });
         });
       });
