@@ -58,6 +58,11 @@ describe("Modella-Mongo", function() {
     });
   });
 
+  it('should provide access to the ObjectID constructor', function() {
+    expect(mongo.ObjectID).to.equal(mongoskin.ObjectID);
+    expect(mongo.ObjectId).to.equal(mongoskin.ObjectID);
+  });
+
   describe("collection", function() {
     it("sets the collection name", function() {
       var Foo = modella('Foo').use(mongo('bar'));
