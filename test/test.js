@@ -1,7 +1,7 @@
 var modella = require('modella'),
     mongo = require('../')('localhost:27017/modella-mongo'),
     mongoskin = require('mongoskin'),
-    db = require('mongoskin').db('localhost:27017/modella-mongo', {w: 1}),
+    db = require('mongoskin').db('mongodb://localhost:27017/modella-mongo', {w: 1}),
     mquery = require('mquery'),
     maggregate = require('maggregate'),
     Batch = require('batch'),
