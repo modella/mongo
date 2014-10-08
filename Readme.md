@@ -91,6 +91,9 @@ The currently available types are Dates and ObjectIds
 ```js
 var User = modella('User');
 
+var mongo = require('modella-mongo')(connectionString);
+// The ObjectID constructor is made available at mongo.ObjectId
+
 User.attr('_id')
 
     // This attribute will always be stored as an ObjectID in the database
@@ -108,6 +111,13 @@ using `modella-mongo` in conjunction with the
 
 
 ## API
+
+### module.exports.ObjectID
+### module.exports.ObjectId
+
+An alias of the mongoskin.ObjectID constructor
+
+## Model Methods
 
 By loading this plugin, `Model` inherits:
 
