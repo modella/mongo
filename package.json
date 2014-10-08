@@ -20,9 +20,9 @@
   "dependencies": {
     "batch": "~0.2.1",
     "debug": "~0.7.0",
-    "maggregate": "^0.2.1",
-    "mongoskin": "^1.4.4",
-    "mquery": "^1.2.1"
+    "maggregate": "~0.2.1",
+    "mongoskin": "~1.4.4",
+    "mquery": "~1.2.1"
   },
   "devDependencies": {
     "async": "~0.9.0",
