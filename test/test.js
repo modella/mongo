@@ -29,7 +29,9 @@ var Ticket = modella('ticket')
   .attr('created', {type: 'date'})
   .attr('viewed', {type: Date})
   .attr('message', {type: 'string'})
-  .attr('creatorId', {type: mongoskin.ObjectID});
+  .attr('creatorId', {type: mongoskin.ObjectID})
+  .attr('responderId', {type: 'ObjectId'})
+  .attr('fixId', {type: 'ObjectID'});
 
 
 User.use(mongo);
@@ -109,19 +111,28 @@ describe("Modella-Mongo", function() {
       });
 
       it("parses a string as an ObjectID if the type is set to `ObjectID`", function(done) {
-        var oid = new mongoskin.ObjectID();
+        var creatorId = new mongoskin.ObjectID();
+        var responderId = new mongoskin.ObjectID();
+        var fixId = new mongoskin.ObjectID();
         var ticket = new Ticket({
           created: '2014-01-01',
           viewed: '2014-01-02',
           message: 'Foo to you sir',
-          creatorId: oid.toHexString()
+          creatorId: creatorId.toHexString(),
+          responderId: responderId.toHexString(),
+          fixId: fixId.toHexString()
         });
 
         ticket.save(function(err) {
           expect(ticket.created() instanceof Date).to.be(true);
           expect(ticket.viewed() instanceof Date).to.be(true);
           expect(ticket.creatorId() instanceof mongoskin.ObjectID).to.be(true);
-          expect(ticket.creatorId().equals(oid)).to.be(true);
+          expect(ticket.creatorId().equals(creatorId)).to.be(true);
+          expect(ticket.responderId() instanceof mongoskin.ObjectID).to.be(true);
+          expect(ticket.responderId().equals(responderId)).to.be(true);
+          expect(ticket.fixId() instanceof mongoskin.ObjectID).to.be(true);
+          expect(ticket.fixId().equals(fixId)).to.be(true);
+          ticket.viewed('2014-01-03');
           done();
         });
       });
@@ -180,26 +191,42 @@ describe("Modella-Mongo", function() {
       });
 
       it("parses a string as an ObjectID if the type is set to `ObjectID`", function(done) {
-        var oid = new mongoskin.ObjectID();
+        var creatorId = new mongoskin.ObjectID();
+        var responderId = new mongoskin.ObjectID();
+        var fixId = new mongoskin.ObjectID();
         var ticket = new Ticket({
           created: '2014-01-01',
           viewed: '2014-01-02',
           message: 'Foo to you sir',
-          creatorId: oid.toHexString()
+          creatorId: creatorId.toHexString(),
+          responderId: responderId.toHexString(),
+          fixId: fixId.toHexString()
         });
 
         ticket.save(function(err) {
           expect(ticket.created() instanceof Date).to.be(true);
           expect(ticket.viewed() instanceof Date).to.be(true);
           expect(ticket.creatorId() instanceof mongoskin.ObjectID).to.be(true);
-          expect(ticket.creatorId().equals(oid)).to.be(true);
+          expect(ticket.creatorId().equals(creatorId)).to.be(true);
+          expect(ticket.responderId() instanceof mongoskin.ObjectID).to.be(true);
+          expect(ticket.responderId().equals(responderId)).to.be(true);
+          expect(ticket.fixId() instanceof mongoskin.ObjectID).to.be(true);
+          expect(ticket.fixId().equals(fixId)).to.be(true);
           ticket.viewed('2014-01-03');
-          var newOid = new mongoskin.ObjectID();
-          ticket.creatorId(newOid.toHexString());
+          var newCreatorId = new mongoskin.ObjectID();
+          var newResponderId = new mongoskin.ObjectID();
+          var newFixId = new mongoskin.ObjectID();
+          ticket.creatorId(newCreatorId.toHexString());
+          ticket.responderId(newResponderId.toHexString());
+          ticket.fixId(newFixId.toHexString());
           ticket.save(function(err) {
             expect(ticket.viewed() instanceof Date).to.be(true);
             expect(ticket.creatorId() instanceof mongoskin.ObjectID).to.be(true);
-            expect(ticket.creatorId().equals(newOid)).to.be(true);
+            expect(ticket.creatorId().equals(newCreatorId)).to.be(true);
+            expect(ticket.responderId() instanceof mongoskin.ObjectID).to.be(true);
+            expect(ticket.responderId().equals(newResponderId)).to.be(true);
+            expect(ticket.fixId() instanceof mongoskin.ObjectID).to.be(true);
+            expect(ticket.fixId().equals(newFixId)).to.be(true);
             done();
           });
         });
