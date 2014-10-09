@@ -78,7 +78,46 @@ This only works for number attributes.
 
 False by default
 
+### `{'type': 'type string or constructor'}`
+
+Since `modella@0.2.9` the `toJSON` method is recursive. This causes 
+objects that can be stored as one of mongodb's BSON types to be 
+converted unecessarily into strings. To prevent this behavior, define 
+types for attributes where appropriate. You do not need to do this for 
+the `_id` attribute.
+
+The currently available types are Dates and ObjectIds
+
+```js
+var User = modella('User');
+
+var mongo = require('modella-mongo')(connectionString);
+// The ObjectID constructor is made available at mongo.ObjectId
+
+User.attr('_id')
+
+    // This attribute will always be stored as an ObjectID in the database
+    .attr('referredBy', {type: 'ObjectId'})
+    // you can also use 'ObjectID' or the actual ObjectID constructor
+
+    // This attribute will always be stroed as an ISODate object in the database
+    .attr('joined', {type: 'date'});
+    // you can also use the Date constructor
+```
+
+Using the constructor rather than a type string is recommended when 
+using `modella-mongo` in conjunction with the 
+[`modella-validators`](https://github.com/modella/validators) plugin.
+
+
 ## API
+
+### module.exports.ObjectID
+### module.exports.ObjectId
+
+An alias of the mongoskin.ObjectID constructor
+
+## Model Methods
 
 By loading this plugin, `Model` inherits:
 
