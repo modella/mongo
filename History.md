@@ -1,4 +1,15 @@
 
+0.2.13 / 2014-10-10 
+==================
+
+ * Use toMongo if it is available
+ * make ObjectID constructor available on plugin before `use`ing it
+ * use `model.unset` to detect when to use `$unset`
+ * add support for `'ObjectId'`, `'ObjectID'`, and `ObjectId` types
+ * updated to newest modella for testing
+ * old semver for node 0.8
+ * update mongoskin
+
 0.2.12 / 2014-09-26 
 ==================
 
