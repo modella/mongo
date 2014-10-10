@@ -33,7 +33,41 @@ var Ticket = modella('Ticket')
   .attr('responderId', {type: 'ObjectId'})
   .attr('fixId', {type: 'ObjectID'});
 
+var OverrideUser = modella('OverrideUser')
+  .attr('_id')
+  .attr('name')
+  .attr('password');
 
+
+OverrideUser.prototype.toMongo = function() {
+  var dump = {};
+  var self = this;
+
+  Object.keys(this.attrs).forEach(function (key) {
+    var val = self.attrs[key];
+
+    dump[key] = !!val.toJSON ? val.toJSON() : modella.utils.clone(val);
+  });
+
+  return dump;
+};
+
+OverrideUser.prototype.toJSON = function() {
+  var dump = {};
+  var self = this;
+
+  Object.keys(this.attrs).forEach(function (key) {
+    if (key === 'password') return;
+    var val = self.attrs[key];
+
+    dump[key] = !!val.toJSON ? val.toJSON() : modella.utils.clone(val);
+  });
+
+  return dump;
+}; 
+
+
+OverrideUser.use(mongo);
 User.use(mongo);
 AtomicUser.use(mongo);
 Ticket.use(mongo);
@@ -47,13 +81,16 @@ var user = new User();
 var col = db.collection("User");
 var atomiccol = db.collection("AtomicUser");
 var ticketcol = db.collection("Ticket");
+var overridecol = db.collection("OverrideUser");
 
 
 describe("Modella-Mongo", function() {
   before(function(done) {
     col.remove({}, function() {
       ticketcol.remove({}, function() {
-        atomiccol.remove({}, done);
+        atomiccol.remove({}, function() {
+          overridecol.remove({}, done);
+        });
       });
     });
   });
@@ -90,6 +127,21 @@ describe("Modella-Mongo", function() {
           col.findOne({}, function(err, u) {
             expect(u).to.be.ok();
             expect(u).to.have.property('name', 'Ryan');
+            done();
+          });
+        });
+      });
+
+      it("saves the record using toMongo if present", function(done) {
+        var user = new OverrideUser({name: 'Ryan', email: 'ryan@slingingcode.com', password: 'foobar123'});
+        user.save(function(err, u) {
+          expect(user.primary()).to.be.ok();
+          overridecol.findOne({}, function(err, u) {
+            expect(u).to.be.ok();
+            expect(u).to.have.property('name', 'Ryan');
+            expect(u).to.have.property('password', 'foobar123');
+            var uJSON = user.toJSON();
+            expect(uJSON).to.not.have.property('password');
             done();
           });
         });
