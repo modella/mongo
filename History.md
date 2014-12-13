@@ -1,5 +1,10 @@
 
-0.2.13 / 2014-10-10 
+0.2.14 / 2014-12-12
+==================
+
+  * better support when primaryKey is not _id
+
+0.2.13 / 2014-10-10
 ==================
 
  * Use toMongo if it is available
@@ -10,109 +15,109 @@
  * old semver for node 0.8
  * update mongoskin
 
-0.2.12 / 2014-09-26 
+0.2.12 / 2014-09-26
 ==================
 
  * check for strings as dates and parse them
 
-0.2.11 / 2014-07-10 
+0.2.11 / 2014-07-10
 ==================
 
  * semver fix for old node
  * add atomic attributes
 
-0.2.10 / 2014-07-08 
+0.2.10 / 2014-07-08
 ==================
 
  * fix bug where non-changing models would cause all attrs to be undefined
 
-0.2.9 / 2014-07-07 
+0.2.9 / 2014-07-07
 ==================
 
  * add bug fix for saving unchanged models when nothing changed on mongo 2.6+
 
-0.2.8 / 2014-03-08 
+0.2.8 / 2014-03-08
 ==================
 
  * fix Model.query() not returning new instances of mquery [closes #8]
 
-0.2.7 / 2013-12-31 
+0.2.7 / 2013-12-31
 ==================
 
  * Made it so passing undefined in to get/find will not return a model
 
-0.2.6 / 2013-11-24 
+0.2.6 / 2013-11-24
 ==================
 
  * Switched back to Mongoskin official
 
-0.2.5 / 2013-11-23 
+0.2.5 / 2013-11-23
 ==================
 
  * Temporary re-point mongoskin to version pinned version
 
-0.2.4 / 2013-11-22 
+0.2.4 / 2013-11-22
 ==================
 
  * Added conversion of _id strings to proper Id for find/get
 
-0.2.3 / 2013-11-14 
+0.2.3 / 2013-11-14
 ==================
 
  * Fixed an issue where on update we weren't returning the new attrs
  * Rely on Mquery for MongoDb Dependency
 
-0.2.2 / 2013-11-13 
+0.2.2 / 2013-11-13
 ==================
 
  * Fixed update and update test
 
-0.2.1 / 2013-11-13 
+0.2.1 / 2013-11-13
 ==================
 
  * Updated API to be more similar to pre-0.2.0
  * Updated devDependency version pinning on package.json
 
-0.2.0 / 2013-11-12 
+0.2.0 / 2013-11-12
 ==================
 
  * Modella 0.2.0 Support
 
-0.1.4 / 2013-10-18 
+0.1.4 / 2013-10-18
 ==================
 
  * Added maggregate support
 
-0.1.3 / 2013-10-11 
+0.1.3 / 2013-10-11
 ==================
 
   * Implemented mquery support
 
-0.1.2 / 2013-10-02 
+0.1.2 / 2013-10-02
 ==================
 
   * Added sparse indexing to unique options in modella
 
-0.1.1 / 2013-06-05 
+0.1.1 / 2013-06-05
 ==================
 
  * More fixes for BSON Errors
 
-0.1.0 / 2013-06-05 
+0.1.0 / 2013-06-05
 ==================
 
  * Added references option to  auto-cast object IDs
 
-0.0.12 / 2013-05-01 
+0.0.12 / 2013-05-01
 ==================
   * Fixed unique errors not showing up on update
 
-0.0.11 / 2013-04-18 
+0.0.11 / 2013-04-18
 ==================
 
   * Added errors to modella fields on unique being taken
 
-0.0.10 / 2013-04-03 
+0.0.10 / 2013-04-03
 ==================
 
   * Merge pull request #1 from rschmukler/master
